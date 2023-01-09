@@ -1,0 +1,19 @@
+﻿@model Reservation.Areas.IdentityAdministrators.Models.SignInVM
+@using Reservation.Views.Helpers
+@{
+    Layout = "_LayoutAdmins";
+    ViewData["Title"] = "Sign In";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.ValidationMessage("Bad_Data")
+    @Html.ValidationMessage("Wrong_Uri")
+
+    @Html.InputWithValidationMessageFor(f=>f.Email)
+    @Html.PasswordWithValidationMessageFor(f=>f.Password)
+
+    <button type="submit">Enter</button>
+}   
+

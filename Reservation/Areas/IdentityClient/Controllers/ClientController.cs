@@ -41,6 +41,7 @@ namespace Reservation.Areas.IdentityClient.Controllers
             var result = await _userManager.CreateAsync(user, vm.Password);
             if (result.Succeeded)
             {
+            
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeEnum.Client.ToString()));
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 return RedirectToAction(nameof(Account));
@@ -55,6 +56,14 @@ namespace Reservation.Areas.IdentityClient.Controllers
                
             }
             return View(vm);
+        }
+
+
+        [HttpGet]
+        public ActionResult SignIn()
+        {
+
+            return View();
         }
 
         [HttpGet]

@@ -1,0 +1,31 @@
+﻿@model Reservation.Areas.IdentityAdministrators.Models.AllRestaurantsVM
+@using Reservation.Views.Helpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_layoutSystemAdministrator";
+    ViewData["Title"] = "Restaurants List";
+}
+
+<a class="btn btn-primary mb-5"  asp-area="IdentityAdministrators" asp-controller="SystemAdministrator" asp-action="AddNewRestaurant"> Add new Restaurant</a>
+
+<ul style="list-style:none;">
+    
+    @foreach(var restaurant in (Model?.Restaurants ?? new List<Reservation.Core.Models.Restaurant>()))
+    {
+        <li class="row" style="border-top:2px solid black;">
+            <div class="col-6">
+                  <h2>@restaurant.Name</h2>
+                  <p>@restaurant.Description</p>
+            </div>
+             <div class="col-5">
+                  <img class="w-100 h-auto" src="/static/@restaurant.AddressOfSchemaImage" />
+             </div>
+             <div class="col-1">
+               <form method="post" asp-action="DeleteRestaurant">
+                  <button type="submit" asp-action="DeleteRestaurant" asp-route-id="@restaurant.Id" class="btn btn-danger">Delete</button>
+               </form>
+                     
+             </div>
+        </li>
+    }
+</ul>

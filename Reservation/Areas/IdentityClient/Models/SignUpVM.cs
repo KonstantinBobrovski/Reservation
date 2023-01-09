@@ -6,11 +6,10 @@ namespace Reservation.Areas.IdentityClient.Models
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required]
         [MinLength(6, ErrorMessage ="Min lengtn of password 6")]
-        
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
     }
 }

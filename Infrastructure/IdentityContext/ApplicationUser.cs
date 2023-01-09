@@ -9,6 +9,6 @@ namespace Infrastructure.IdentityContext
 {
     public class ApplicationUser : IdentityUser
     {
-        public int DbId { get; set; }
+       
     }
 }

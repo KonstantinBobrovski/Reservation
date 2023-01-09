@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.EntiesContext
 {
-    public  class EntitiesContext:DbContext
+    public  class EntitiesDbContext:DbContext
     {
-        public EntitiesContext(DbContextOptions<EntitiesContext> options) : base(options) { }
+        public EntitiesDbContext(DbContextOptions<EntitiesDbContext> options) : base(options) { }
 
         public DbSet<Restaurant> Restaurants { get; set; }
       
@@ -18,6 +18,5 @@ namespace Infrastructure.EntiesContext
       
         public DbSet<Reservation.Core.Models.Reservation> Reservations { get; set; }
 
- 
     }
 }
