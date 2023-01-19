@@ -62,17 +62,19 @@ internal class Program
         {
             var services = scope.ServiceProvider;
 
-           // var identiyContext = services.GetRequiredService<IdentityDbContext>();
-           // if (identiyContext.Database.GetPendingMigrations().Any())
-           // {
-           //     identiyContext.Database.Migrate();
-           // }
-           //
-           // var entitiesContext = services.GetRequiredService<EntitiesDbContext>();
-           // if (entitiesContext.Database.GetPendingMigrations().Any())
-           // {
-           //     entitiesContext.Database.Migrate();
-           // }
+          var identiyContext = services.GetRequiredService<IdentityDbContext>();
+            //identiyContext.Database.EnsureDeleted();
+            var entitiesContext = services.GetRequiredService<EntitiesDbContext>();
+          //  entitiesContext.Database.EnsureDeleted();
+            if (identiyContext.Database.GetPendingMigrations().Any())
+            {
+                identiyContext.Database.Migrate();
+            }
+            
+            if (entitiesContext.Database.GetPendingMigrations().Any())
+            {
+                entitiesContext.Database.Migrate();
+            }
 
             Seed(services);
         }
@@ -82,21 +84,18 @@ internal class Program
 
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
-         builder.Services.AddDbContext<IdentityDbContext>(c =>
-          c.UseSqlServer("Server=sqlServer;Database=Identity;User=sa;Password=S3cur3P@ssW0rd!;TrustServerCertificate=true;"));
-         builder.Services.AddDbContext<EntitiesDbContext>(c =>
-         c.UseSqlServer("Server=sqlServer;Database=Application;User=sa;Password=S3cur3P@ssW0rd!;TrustServerCertificate=true;"));
-
-       // builder.Services.AddDbContext<IdentityDbContext>(c => c.UseInMemoryDatabase("Identity"));
-       // builder.Services.AddDbContext<EntitiesDbContext>(c => c.UseInMemoryDatabase("Enitites"));
+        ConfigureContext.Configure(builder.Services, builder.Configuration);
 
 
         builder.Services.AddScoped(typeof(IFileService), typeof(FileService));
 
         builder.Services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
-       // builder.Services.AddScoped(typeof(IRepository<Table>), typeof(EfCoreRepository));
-       // builder.Services.AddScoped(typeof(IRepository<Reservation.Core.Models.Reservation>), typeof(EfCoreRepository));
 
+        builder.Services.AddScoped<IClientNotifier, ClientNotifier>();
+        builder.Services.AddScoped<IRestaurantNotifier,RestaurantNotifier>();
+
+        builder.Services.AddScoped<IReservationService, ReservationService>();
+      
 
         builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 

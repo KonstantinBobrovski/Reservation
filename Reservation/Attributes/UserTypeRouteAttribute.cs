@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Reservation.consts;
 using System.Security.Claims;
+using Reservation.Areas.IdentityClient.Controllers;
+using Reservation.Areas.IdentityAdministrators.Controllers;
+using System.Reflection;
+using Reservation.Areas.IdentityRestaurant.Controllers;
 
 namespace Reservation.Attributes
 {
@@ -33,18 +37,32 @@ namespace Reservation.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            
+            //default redirect is to client
+            Type controller= typeof(ClientController);
+            if (UserType.HasFlag(UserTypeEnum.System_Administrator)){
+                controller = typeof(SystemAdministratorController);
+            }
+            else if (UserType.HasFlag(UserTypeEnum.Restaraunt_Administrator))
+            {
+                controller = typeof(RestaurantController);
+            }
+            else if (UserType.HasFlag(UserTypeEnum.Client))
+            {
+                controller = typeof(ClientController);
+            }
+          
+            var redirectOnUnAuthorizedUrl=new RedirectToActionResult("SignIn", controller.Name.Replace("Controller","",StringComparison.OrdinalIgnoreCase ), new {area=controller.GetCustomAttribute<AreaAttribute>().RouteValue});
             var userType = context.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
 
             if (userType == null)
             {
-                context.Result=new ForbidResult();
+                context.Result= redirectOnUnAuthorizedUrl;
 
             }
             else if (Enum.TryParse(userType, out UserTypeEnum userTypeAsEnum))
             {
-                if (userTypeAsEnum != this.UserType)
-                    context.Result = new ForbidResult();
+                if (!this.UserType.HasFlag(userTypeAsEnum))
+                    context.Result = redirectOnUnAuthorizedUrl;
 
             }
             else

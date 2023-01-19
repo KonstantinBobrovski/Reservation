@@ -10,25 +10,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\IdentityAdministrators\Data\**" />
     <Compile Remove="Areas\IdentityClient\Data\**" />
+    <Compile Remove="Areas\Reservations\Data\**" />
     <Compile Remove="Areas\Restaraunts\**" />
+    <Content Remove="Areas\IdentityAdministrators\Data\**" />
     <Content Remove="Areas\IdentityClient\Data\**" />
+    <Content Remove="Areas\Reservations\Data\**" />
     <Content Remove="Areas\Restaraunts\**" />
+    <EmbeddedResource Remove="Areas\IdentityAdministrators\Data\**" />
     <EmbeddedResource Remove="Areas\IdentityClient\Data\**" />
+    <EmbeddedResource Remove="Areas\Reservations\Data\**" />
     <EmbeddedResource Remove="Areas\Restaraunts\**" />
+    <None Remove="Areas\IdentityAdministrators\Data\**" />
     <None Remove="Areas\IdentityClient\Data\**" />
+    <None Remove="Areas\Reservations\Data\**" />
     <None Remove="Areas\Restaraunts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\IdentityRestaurant\Views\SignIn.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,12 +44,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\IdentityAdministrators\Data\" />
-    <Folder Include="Areas\Reservations\Data\" />
+    <None Include="Areas\IdentityClient\Views\Client\Account.cshtml" />
+    <None Include="Areas\IdentityRestaurant\Views\Restaurant\SignIn.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Areas\IdentityClient\Views\Client\Account.cshtml" />
+    <Folder Include="Areas\IdentityRestaurant\Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\IdentityRestaurant\Views\SignIn.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\IdentityRestaurant\Views\SignIn.cshtml" />
   </ItemGroup>
 
 </Project>

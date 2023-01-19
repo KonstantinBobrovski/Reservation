@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Reservation.Views.Helpers;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Reservation.Areas.IdentityClient.Models.SignUpVM
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = "SignIn";
 }
+
+<h1>Sign In</h1>
+
+<form asp-area="IdentityClient" asp-controller="Client" asp-action="SignIn" method="post">
+    <div>
+        @Html.ValidationSummary(true)
+    </div>
+
+    @Html.InputWithValidationMessageFor(m=>m.Email)
+    @Html.PasswordWithValidationMessageFor(m=>m.Password)
+    <button class="btn btn-primary" type="submit">Sign In</button>
+
+</form>

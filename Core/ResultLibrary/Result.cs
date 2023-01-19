@@ -36,5 +36,10 @@ namespace Core.ResultLibrary
         {
            return result.Value;
         }
+
+        public static implicit operator Result<T>(T result)
+        {
+            return new Result<T>(result);
+        }
     }
 }

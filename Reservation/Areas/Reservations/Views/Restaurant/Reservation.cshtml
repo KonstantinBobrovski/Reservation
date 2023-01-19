@@ -1,0 +1,42 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Reservation.Areas.Reservations.Models.ReservationVM
+
+@using Core.Models;
+@using Reservation.Areas.Reservations.Controllers;
+@using Reservation.Views.Helpers;
+@using System.Security.Claims;
+@using Reservation.consts;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Reservation.Table.Restaurant.Name;
+}
+<h2 style="color:red">
+    @Html.ValidationMessage("Validation")
+</h2>
+<h3>Table Name:@Model.Reservation.Table.NameOfTable</h3>
+<h3>Restaurant Name:@Model.Reservation.Table.Restaurant.Name</h3>
+<h3>From @Model.Reservation.StartDate to @Model.Reservation.EndDate</h3>
+<h3>Current state: @Model.Reservation.ReservationState</h3>
+@using (Html.BeginForm())
+{
+    @if (User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value == UserTypeEnum.Client.ToString())
+    {
+        <select asp-for="NewState">
+            <option value="@ReservationState.Sended">Sent</option>
+
+            <option value="@ReservationState.Canceled">Cancel</option>
+        </select>
+    }
+    else
+    {
+        <select asp-for="NewState">
+            <option value="@ReservationState.Approved">Approve</option>
+            <option value="@ReservationState.EndedSuccessful">Ended successful</option>
+            <option value="@ReservationState.EndedFail">Ended with fail</option>
+            <option value="@ReservationState.Canceled">Cancel</option>
+        </select>
+    }
+
+    <button>Submit</button>
+}

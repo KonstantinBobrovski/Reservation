@@ -10,8 +10,6 @@
 </div>
 
 <form enctype="multipart/form-data" method="post">
-
-    @Html.HiddenFor(m=>m.Id)
     @Html.InputWithValidationMessageFor(m=>m.Name)
 
     <div class="mb-3 form-floating">
@@ -25,7 +23,7 @@
     </div>
     <fieldset>
     <legend style="float:none">Administrator</legend>
-    @Html.HiddenFor(m=>m.Administrator.Id)
+    
     @Html.InputWithValidationMessageFor(m=>m.Administrator.Email)
     @Html.PasswordWithValidationMessageFor(m=>m.Administrator.Password)
 
@@ -43,6 +41,12 @@
                         <input type="number" name="Tables[@i].Capacity" value="@Model.Tables[i].Capacity"/>
 
                     </label>
+                    <label>
+                        <span>Name of table (As on your scheme)</span>
+
+                        <input type="text" name="Tables[@i].Name" value="@Model.Tables[i].Name"/>
+
+                    </label>
                     <button class="btn btn-danger" onclick="event.preventDefault();Delete(@i))">Delete</button>
                 </div>
             }
@@ -55,12 +59,17 @@
 <script>
     let count=@(Model?.Tables?.Count ?? 0);
   function NewTable(){
+
       const currCount=count;
       const html=`<div class="d-flex">
         <label>
             <span>Capacity</span>
            <input type="number" name="Tables[${currCount}].Capacity"/>
            
+        </label>
+        <label>
+          <span>Name of table (As on your scheme)</span>
+          <input type="text" name="Tables[${currCount}].Name"/>
         </label>
         <button class="btn btn-danger" onclick="event.preventDefault();Delete(${currCount})">Delete</button>
       </div>`
@@ -69,7 +78,7 @@
   }
 
   function Delete(ind){
-      document.querySelector(`#Tables [name="Tables${ind}.Capacity"]`).parentElement.parentElement.remove();
+      document.querySelector(`#Tables [name="Tables[${ind}].Capacity"]`).parentElement.parentElement.remove();
        document.querySelectorAll(`#Tables input[name]`).forEach((val,ind)=>{
            val.setAttribute("name","Tables["+ind+"].Capacity");
        })

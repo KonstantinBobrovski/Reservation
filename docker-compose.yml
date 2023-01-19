@@ -7,20 +7,17 @@ services:
       context: .
       dockerfile: Reservation/Dockerfile
     depends_on:
-          - sqlServer
-  redis:
-    image: redis:latest
-    ports:
-      - '6379:6379'
-    volumes: 
-      - redis:/data
-  sqlServer:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    ports:
-      - "1433:1433"
+          - postgres
+  postgres:
+    image: postgres
+    restart: always
     environment:
-      SA_PASSWORD: "S3cur3P@ssW0rd!"
-      ACCEPT_EULA: "Y"
-
+      - POSTGRES_PASSWORD=Password!123#AzMogaTukISega
+      - POSTGRES_USER=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
 volumes:
-    redis:
+  db:
+    driver: local

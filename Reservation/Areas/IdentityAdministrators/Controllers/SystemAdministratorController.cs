@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Reservation.Areas.IdentityAdministrators.Models;
 using Reservation.Attributes;
 using Reservation.consts;
+using Reservation.Controllers;
 using Reservation.Core.Models;
 using System.Drawing.Imaging;
 using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Reservation.Areas.IdentityAdministrators.Controllers
 {
@@ -135,8 +135,8 @@ namespace Reservation.Areas.IdentityAdministrators.Controllers
 
 
 
-            var pathForSchema = restaurantVm.Name.ToString() + Path.GetExtension(restaurantVm.SchemaOfRestaurant.Name);
-            var restaurant = new Core.Models.Restaurant() { Name = restaurantVm.Name, Description = restaurantVm.Description, AddressOfSchemaImage = pathForSchema,Tables=restaurantVm.Tables.Select(t=>new Core.Models.Table() { Capacity=t.Capacity}).ToList() };
+            var pathForSchema =  restaurantVm.Name.ToString() + Path.GetExtension(restaurantVm.SchemaOfRestaurant.Name);
+            var restaurant = new Core.Models.Restaurant() { Name = restaurantVm.Name, Description = restaurantVm.Description, AddressOfSchemaImage = "/static/" + pathForSchema, Tables = restaurantVm.Tables.Select(t => new Core.Models.Table() { Capacity = t.Capacity , NameOfTable=t.Name}).ToList() };
             var createdRestaurant = await _restaurantService.CreateRestaurant(restaurant);
             if (createdRestaurant.State != ResultState.Success)
             {
@@ -164,19 +164,19 @@ namespace Reservation.Areas.IdentityAdministrators.Controllers
             return View("Restaurant", restaurantVm);
 
         }
-
-        [HttpGet]
-        [UserTypeRoute(UserTypeEnum.System_Administrator)]
-        public async Task<IActionResult> EditRestaurant(int id)
-        {
-            var restaurant = await _restaurantService.GetRestaurant(id);
-            if (restaurant.State == ResultState.Success)
-            {
-                return View("Restaurant", new RestaurantCreateVM() { Description = restaurant.Value.Description, Name = restaurant.Value.Name, Id = restaurant.Value.Id.ToString(),Tables=restaurant.Value.Tables.Select(t=>new TableLike() { Capacity=t.Capacity}).ToList() });
-            }
-            else
-                return View("Restaurant");
-        }
+//
+//        [HttpGet]
+//        [UserTypeRoute(UserTypeEnum.System_Administrator)]
+//        public async Task<IActionResult> EditRestaurant(int id)
+//        {
+//            var restaurant = await _restaurantService.GetRestaurant(id);
+//            if (restaurant.State == ResultState.Success)
+//            {
+//                return View("Restaurant", new RestaurantCreateVM() { Description = restaurant.Value.Description, Name = restaurant.Value.Name, Id = restaurant.Value.Id.ToString(), Tables = restaurant.Value.Tables.Select(t => new TableLike() { Capacity = t.Capacity }).ToList() });
+//            }
+//            else
+//                return View("Restaurant");
+//        }
 
         [HttpPost]
         [UserTypeRoute(UserTypeEnum.System_Administrator)]
@@ -190,6 +190,15 @@ namespace Reservation.Areas.IdentityAdministrators.Controllers
                 return View("RestaurantsList", new AllRestaurantsVM() { Restaurants = restaurants.Value });
             ModelState.AddModelError("Internal", "Internal error occured");
             return View("RestaurantsList");
+        }
+
+        [HttpPost]
+        [UserTypeRoute(UserTypeEnum.System_Administrator)]
+        public new async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect("/home/index");
+            // return RedirectToAction(nameof(HomeController.Index), nameof(HomeController), new { area = "" });
         }
     }
 }

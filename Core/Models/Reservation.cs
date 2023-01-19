@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Reservation.Core.Models
     public class Reservation : BaseEntity
     {
         public int TableId { get; set; }
+        public Table Table { get; set; }
 
         public string ClientId { get; set; }
 
@@ -18,5 +20,7 @@ namespace Reservation.Core.Models
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        public ReservationState ReservationState { get; set; }
     }
 }

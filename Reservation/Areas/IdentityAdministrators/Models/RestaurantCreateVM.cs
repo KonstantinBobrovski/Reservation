@@ -6,16 +6,18 @@ namespace Reservation.Areas.IdentityAdministrators.Models
 {
     public class RestaurantCreateVM
     {
-        
-        public string? Id { get; set; }= "";
+ 
         [Required]
         public string Name { get; set; } = null!;
+
         [Required]
         public string Description { get; set; } = null!;
-        
-        public UserLike Administrator { get; set; } = new();
 
-        public List<TableLike> Tables { get; set; }
+        [Required]
+        public UserLikeVM Administrator { get; set; } = new();
+
+        [Required]
+        public List<TableLikeVM> Tables { get; set; }
 
         [Required]
         [Display(Name = "File")]
@@ -23,10 +25,9 @@ namespace Reservation.Areas.IdentityAdministrators.Models
         public IFormFile SchemaOfRestaurant { get; set; }
 
     }
-    public class UserLike
+    public class UserLikeVM
     {
-       
-        public string? Id { get; set; } = "";
+      
 
         [Required]
         [EmailAddress]
@@ -36,11 +37,13 @@ namespace Reservation.Areas.IdentityAdministrators.Models
         [PasswordPropertyText]
         public string Password { get; set; } = null!;
     }
-    public class TableLike
+    public class TableLikeVM
     {
-        public string? Id { get; set; } = "";
 
         [Required]
         public int Capacity { get; set; }
+
+        [Required]
+        public string Name { get; set; }
     }
 }

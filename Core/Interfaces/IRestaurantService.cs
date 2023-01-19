@@ -10,7 +10,6 @@ namespace Core.Interfaces
 {
     public interface IRestaurantService
     {
-        Task<Result<Reservation.Core.Models.Reservation>> CreateReservation(Table table, string clientId, DateTime startDate, DateTime? endDate);
 
         Task<Result<List<Restaurant>>> GetAllRestaurants();
         Task<Result<Restaurant>> GetRestaurant(int Id);
@@ -20,5 +19,7 @@ namespace Core.Interfaces
         Task<Result<Restaurant>> DeleteRestaurant(int Id);
 
         Task<Result<Restaurant>> UpdateRestaurant(int Id,Restaurant r);
+
+        Task<Result<List<Reservation.Core.Models.Table>>> GetTablesWithReservations(int restaurantId, DateTime from, DateTime? to);
     }
 }

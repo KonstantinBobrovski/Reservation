@@ -16,6 +16,11 @@ namespace Reservation.Core.Models
         /// </summary>
         public int Capacity { get; set; }
 
-        public List<Reservation>? Reservations { get; set; }
+        public List<Reservation>? Reservations { get; set; } = new List<Reservation>();
+
+        /// <summary>
+        /// Name of table so user can understand which table is choosen
+        /// </summary>
+        public string NameOfTable { get; set; } = null!;
     }
 }

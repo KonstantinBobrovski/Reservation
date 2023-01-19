@@ -1,0 +1,58 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Reservation.Areas.Reservations.Models.ReservationCreateVM
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Reservation";
+}
+<div class="container">
+    <h1>
+        Create you own reservation for @Model.RestaurantName
+    </h1>
+    @using (Html.BeginForm())
+    {
+        <h2 style="color:red">@Html.ValidationMessage("ResultState")</h2>
+        <label for="#table-name">Name of table that you wish</label>
+
+        //for not refreshing data from db
+        <input type="hidden" name="RestaurantName" value="@Model.RestaurantName" />
+
+        @for (int i=0;i<Model.PossibleTables.Count;i++)
+        {
+            <input type="hidden" name="PossibleTables[@i].Id" value="@Model.PossibleTables[i].Id" />
+            <input type="hidden" name="PossibleTables[@i].NameOfTable" value="@Model.PossibleTables[i].NameOfTable" />
+
+        }
+        <input type="hidden" asp-for="TableId" value="@(Model.TableId!=default(int)?Model.TableId: Model.PossibleTables.FirstOrDefault()?.Id)" />
+        <select class="my-4 form-control" id="table-name" value="@Model.TableId" onchange="document.querySelector(`input[name='TableId']`).setAttribute('value', event.target.value)">
+            @foreach (var table in Model.PossibleTables)
+            {
+                <option value="@table.Id">@table.NameOfTable</option>
+            }
+        </select>
+        <script>
+            document.querySelector("#table-name option[value='@Model.TableId']").setAttribute("selected","")
+        </script>
+        <br />
+        <div>
+            <h2 class="w-100 text-center">Your reservation will be </h2>
+            <div class="d-flex align-items-start gap-4 justify-content-center">
+                <div class="d-flex flex-column">
+                    <span>From: </span>
+                    <input type="datetime-local" asp-for="StartTime" value="@Model.StartTime.ToString("yyyy-MM-dd HH:mm:ss")" />
+                </div>
+
+                <span> and </span>
+                <div class="d-flex flex-column">
+                    <span>To: </span>
+                    <input type="datetime-local" asp-for="EndTime" value="@Model.EndTime.ToString("yyyy-MM-dd HH:mm:ss")" />
+                </div>
+
+            </div>
+
+        </div>
+
+        <button class="btn btn-primary" type="submit"> Submit </button>
+    }
+</div>

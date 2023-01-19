@@ -13,11 +13,17 @@ namespace Core.Services
 {
     public class RestaurantService : IRestaurantService
     {
+        
+
         IRepository<Restaurant> _restaurantsRepository;
-        public RestaurantService(IRepository<Restaurant> restaurantsRepository)
+        IRepository<Table> _tablesRepository;
+        IRepository<Reservation.Core.Models.Reservation> _reservationRepository;
+
+        public RestaurantService(IRepository<Restaurant> restaurantsRepository, IRepository<Table> tablesRepo,IRepository<Reservation.Core.Models.Reservation> resRepo)
         {
             _restaurantsRepository = restaurantsRepository;
-
+            _tablesRepository = tablesRepo;
+            _reservationRepository = resRepo;
         }
 
         public async Task<Result<Restaurant>> CreateRestaurant(Restaurant restaurant)
@@ -52,9 +58,20 @@ namespace Core.Services
             return new Result<Restaurant>(r);
         }
 
-        public Task<Result<Reservation.Core.Models.Reservation>> CreateReservation(Table table, string clientId, DateTime startDate, DateTime? endDate)
+       
+
+        public async Task<Result<List<Table>>> GetTablesWithReservations(int restaurantId, DateTime from, DateTime? to)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result =await _tablesRepository.ListAsync(new GetTablesWithReservationsSpec(restaurantId, from, to));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private class GetRestaurantSpec : Specification<Restaurant>, ISingleResultSpecification
@@ -64,5 +81,19 @@ namespace Core.Services
                 Query.Where(company => company.Id == id).Include(x => x.Tables);
             }
         }
+
+        private class GetTablesWithReservationsSpec : Specification<Table>
+        {
+            public GetTablesWithReservationsSpec(int restaurantId, DateTime from, DateTime? to)
+            {
+                if(to is null)
+                    Query.Where(table => table.RestaurantId == restaurantId).Include(x => x.Reservations.Where(res=> res.ReservationState == Models.ReservationState.Approved &&  res.StartDate>=from));
+                else
+                    Query.Where(table => table.RestaurantId == restaurantId).Include(x => x.Reservations.Where(res => res.ReservationState==Models.ReservationState.Approved && res.StartDate >= from && res.StartDate<=to));
+
+            }
+        }
+
+        
     }
 }

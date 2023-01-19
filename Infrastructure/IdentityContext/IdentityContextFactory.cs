@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,14 @@ namespace Infrastructure.IdentityContext
     {
         public IdentityDbContext CreateDbContext(string[] args)
         {
+            var path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory() , @"..\Reservation"));
+
+            var configuration = new ConfigurationBuilder().SetBasePath(path).AddJsonFile("appsettings.json")
+            .Build();
+
+
             var optionsBuilder = new DbContextOptionsBuilder<IdentityDbContext>();
-            optionsBuilder.UseSqlServer("Server=sqlServer;Database=Identity;User=sa;Password=S3cur3P@ssW0rd!;TrustServerCertificate=true;");
+            optionsBuilder.UseNpgsql(configuration.GetConnectionString("Identity"));
 
             return new IdentityDbContext(optionsBuilder.Options);
             

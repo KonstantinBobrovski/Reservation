@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.EntiesContext
 {
@@ -17,8 +18,15 @@ namespace Infrastructure.EntiesContext
     {
         public EntitiesDbContext CreateDbContext(string[] args)
         {
+            var path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\Reservation"));
+
+            var configuration = new ConfigurationBuilder().SetBasePath(path).AddJsonFile("appsettings.json")
+           .Build();
+
+
+
             var optionsBuilder = new DbContextOptionsBuilder<EntitiesDbContext>();
-            optionsBuilder.UseSqlServer("Server=sqlServer;Database=Application;User=sa;Password=S3cur3P@ssW0rd!;TrustServerCertificate=true;");
+            optionsBuilder.UseNpgsql(configuration.GetConnectionString("Entities"));
 
             return new EntitiesDbContext(optionsBuilder.Options);
 

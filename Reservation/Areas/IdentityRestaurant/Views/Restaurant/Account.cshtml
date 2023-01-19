@@ -1,0 +1,90 @@
+﻿@using Reservation.Areas.Reservations.Controllers;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Reservation.Areas.IdentityRestaurant.Models.AccountVm
+@{
+    ViewData["Title"] = "Reservations of " + Model.Restaurant.Name;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Reservation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Reservation.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Reservation</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                       
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            <div>
+                Name: @Model.Restaurant.Name
+            </div>
+            <form method="post" asp-action="SignOut" class="m-5">
+                <button type="submit" class="btn btn-danger">Sign Out</button>
+            </form>
+
+            <div class="container">
+                <h2>Your reservations</h2>
+                @foreach (var item in Model.Reservations)
+                {
+                    <div class="d-flex justify-content-around p-3 reservation-wrapper">
+                        <div class="d-flex flex-column">
+                            <span>From: <i>@item.StartDate</i></span>
+                            <span>To: <i>@item.EndDate</i></span>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <span>Reservation status</span>
+                            <!--TODO: ADD switch case for better UX for translate of states-->
+                            <span><i> @item.ReservationState </i></span>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <span>Table: <i>@item.Table.NameOfTable</i> with capacity <i>@item.Table.Capacity</i></span>
+                            <span>Restaurant: <i><a asp-action="@nameof(RestaurantController.Restaurant)" asp-controller="Restaurant" asp-area="Reservations" asp-route-id="@item.Table.RestaurantId">@item.Table.Restaurant.Name</a> </i> </span>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <a class="btn btn-secondary btn-outline-dark" asp-action="@nameof(RestaurantController.Reservation)" asp-controller="Restaurant" asp-area="Reservations" asp-route-restaurnatId="@item.Table.RestaurantId" asp-route-reservationId="@item.Id"> Change reservation</a>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <style>
+                .reservation-wrapper:nth-child(2n) {
+                    background: gray;
+                    color: white
+                }
+            </style>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Reservation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+  
+</body>
+</html>
+

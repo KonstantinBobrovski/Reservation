@@ -1,5 +1,24 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Reservation.Areas.Reservations.Models.AllRestaurantsVm
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = "Restaurants";
 }
+
+
+<h1>All restaurants:</h1>
+
+<div class="row">
+    @foreach(var restaurant in Model.Restaurants)
+    {
+        <div class="card col-4">
+            <img src="@restaurant.AddressOfSchemaImage" class="card-img-top" alt="ImageScheme">
+            <div class="card-body">
+                <h5 class="card-title">@restaurant.Name</h5>
+                <p class="card-text">@restaurant.Description</p>
+                <a asp-action="Restaurant" asp-route-id="@restaurant.Id" class="btn btn-primary">Check restaurnat</a>
+            </div>
+        </div>
+    }
+</div>

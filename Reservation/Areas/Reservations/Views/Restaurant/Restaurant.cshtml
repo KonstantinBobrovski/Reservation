@@ -1,0 +1,44 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Reservation.Areas.Reservations.Controllers;
+@using Reservation.Views.Helpers
+@model Reservation.Areas.Reservations.Models.RestaurantVM
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Restaurant.Name;
+}
+<div class="container">
+    <h2>@Model.Restaurant.Name</h2>
+    <p>@Model.Restaurant.Description</p>
+    <img class="w-100 h-auto" src="@Model.Restaurant.AddressOfSchemaImage" />
+</div>
+
+<div class="container">
+    @foreach (var table in Model.Tables)
+    {
+        <div style="border:2px soldid gray; margin:5px;">
+            <h2>Table name: @table.NameOfTable</h2>
+            <div style="overflow-x:auto">
+                @if (table.Reservations.Count == 0)
+                {
+                    <h2 style="padding-left:2em;">No reservations for this table for the selected time</h2>
+                }
+                @foreach (var reservation in table.Reservations)
+                {
+                    <span class="m-5">From: <i>@reservation.StartDate</i> To: <i>@reservation.EndDate</i> </span>
+                }
+            </div>
+        </div>
+    }
+    <br/>
+
+    @using (Html.BeginForm(nameof(RestaurantController.Restaurant),nameof(RestaurantController).Replace("Controller",""),new {id=Model.Restaurant.Id },FormMethod.Get))
+    {
+        <h3>Choose date for checking reservations</h3>
+        <input class="form-control m-2" type="datetime-local" name="maxCheckReservation" value="@Model.MaxReservationCheckDate.ToString("yyyy-MM-dd HH:mm:ss")" />
+        <button class="btn btn-secondary">Change check date</button>
+    }
+    <br/>
+   
+    <a class="btn btn-primary text-center" asp-action="@nameof(RestaurantController.CreateReservation)" asp-controller="@nameof(RestaurantController).Replace("Controller","")" asp-route-id="@Model.Restaurant.Id" asp-route-EndTime="@Model.MaxReservationCheckDate">Go and create and reservation!</a>
+
+</div>

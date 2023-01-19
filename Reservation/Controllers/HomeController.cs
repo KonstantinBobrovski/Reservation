@@ -8,6 +8,8 @@ using System.Diagnostics;
 
 namespace Reservation.Controllers
 {
+    [Controller]
+    [Route("/[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,8 +21,8 @@ namespace Reservation.Controllers
             
         }
 
-      
-      
+
+        [HttpGet]
         public IActionResult Index()
         {
           
